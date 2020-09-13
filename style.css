@@ -1,0 +1,95 @@
+body {
+  margin-left: 8%;
+  margin-right: 8%;
+}
+
+.title-section {
+  background-color: aliceblue;
+  margin-bottom: 10vh;
+}
+
+.title-wrapper {
+  margin-left: auto;
+  margin-right: auto;
+  width: 500px;
+  display: flex;
+  flex-flow: column;
+  align-items: center;
+  padding: 20px;
+}
+
+.title-img {
+  width: 200px;
+  height: 200px;
+}
+
+.title-h1 {
+  text-align: center;
+}
+
+.menu-section {
+  display: flex;
+  justify-content: space-around;
+  margin-bottom: 5vh;
+}
+
+.menu-wrapper {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 200px;
+  background-color: red;
+}
+
+.menu-input {
+  width: 100px;
+}
+
+.menu-text {
+  font-size: 20px;
+}
+
+.main-section {
+  display: flex;
+  flex-flow: column;
+  align-items: center;
+  margin-bottom: 10vh;
+  background-color: lavender;
+  padding: 20px 0;
+}
+
+.student {
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+  height: 100px;
+  padding: 20px 20px;
+  background-color: antiquewhite;
+  margin-bottom: 10px;
+  min-width: 700px;
+  width: 95%;
+}
+
+.student:last-child {
+  margin-bottom: 0;
+}
+
+.student-img {
+  width: 100px;
+  height: 100px;
+  background-color: red;
+}
+
+.student-name {
+  margin-left: 20px;
+}
+
+.details-btn {
+  width: 200px;
+  height: 50px;
+  margin-left: auto;
+}
+
+.info-section {
+  background-color: lightblue;
+}
