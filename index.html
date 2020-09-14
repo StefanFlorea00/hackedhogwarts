@@ -1,96 +1,106 @@
 <!DOCTYPE html>
 <html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+    <link
+      href="https://fonts.googleapis.com/css2?family=Rubik:ital,wght@0,300;0,400;0,700;1,400&display=swap"
+      rel="stylesheet"
+    />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Tangerine:wght@700&display=swap"
+      rel="stylesheet"
+    />
 
-<head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Document</title>
-  <link href="https://fonts.googleapis.com/css2?family=Rubik:ital,wght@0,300;0,400;0,700;1,400&display=swap"
-    rel="stylesheet">
-  <link href="https://fonts.googleapis.com/css2?family=Tangerine:wght@700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css" />
+  </head>
 
-  <link rel="stylesheet" href="style.css" />
-</head>
-
-<body>
-  <section class="title-section">
-    <div class="title-wrapper">
-      <img class="title-img" src="./hogwarts-logo.png" alt="" />
-      <h1 class=" title-h1">Hogwarts School</h1>
-    </div>
-  </section>
-
-  <section class="menu-section">
-    <div class="menu-wrapper">
-      <p class="menu-text">Filter: </p>
-      <select class="menu-input" name="filter" id="filter">
-        <option value="name">Name</option>
-        <option value="age">Age</option>
-      </select>
-    </div>
-    <div class="menu-wrapper">
-      <p class="menu-text">Sort: </p>
-      <select class="menu-input" name="sort" id="sort"></select>
-    </div>
-    <div class="menu-wrapper">
-      <p class="menu-text">Search: </p>
-      <input class="menu-input" type="text" name="search" id="search" />
-    </div>
-  </section>
-
-  <section class="info-section">
-    <p>Students in bla</p>
-    <p>Students with bla</p>
-    <p>Students blabla</p>
-  </section>
-  <main class="main-section">
-    <div class="student">
-      <img class="student-img" src="" alt="" />
-      <img class="student-house-img" src="" alt="" />
-      <h2 class="student-name">Name Surname</h2>
-      <p class="student-details">Details1</p>
-      <p class="student-details">Details1</p>
-      <button class="details-btn">Details</button>
-    </div>
-
-    <div class="student">
-      <img class="student-img" src="" alt="" />
-      <h2 class="student-name">Name Surname</h2>
-      <button class="details-btn">Details</button>
-    </div>
-
-    <div class="student">
-      <img class="student-img" src="" alt="" />
-      <h2 class="student-name">Name Surname</h2>
-      <button class="details-btn">Details</button>
-    </div>
-  </main>
-
-
-  <div id="student-modal" class="modal">
-    <div class="modal-content">
-      <div class="modal-student-img-wrapper">
-        <img class="student-img" src="" alt="" />
-        <img class="student-house-img" src="" alt="" />
+  <body>
+    <header>
+      <nav>
+        <ul>
+          <li><a href="default.asp">Home</a></li>
+          <li><a href="news.asp">News</a></li>
+          <li><a href="contact.asp">Student List</a></li>
+        </ul>
+      </nav>
+    </header>
+    <section class="title-section">
+      <div class="title-wrapper">
+        <img class="title-img" src="./hogwarts-logo.png" alt="" />
+        <h1 class="title-h1">Hogwarts</h1>
+        <img class="title-bg-img" src="./title-bg.jpg" />
       </div>
-      <div class="modal-student-details-wrapper">
-        <h2 class="student-name">Name Surname</h2>
-        <p class="student-details">Details1</p>
-        <div class="modal-student-button-wrapper">
-          <button class="details-btn">Expell</button>
-          <button class="details-btn">Promote</button>
-          <button class="details-btn">Set Prefect</button>
+    </section>
+
+    <section class="menu-section">
+      <div class="menu-wrapper">
+        <p class="menu-text">Filter by</p>
+        <select class="menu-input" name="filter" id="filter">
+          <option value="name">Name</option>
+          <option value="age">Age</option>
+        </select>
+      </div>
+      <div class="menu-wrapper" id="search-wrapper">
+        <p class="menu-text">Search</p>
+        <input class="menu-input" type="text" name="search" id="search" />
+      </div>
+      <div class="menu-wrapper" id="sort-wrapper">
+        <p class="menu-text">Sort by</p>
+        <p data-action="sort" data-sort-direction="asc" data-sort="name">
+          Forename
+        </p>
+        <p data-action="sort" data-sort-direction="asc" data-sort="name">
+          Surname
+        </p>
+        <p data-action="sort" data-sort-direction="asc" data-sort="gender">
+          Gender
+        </p>
+        <p data-action="sort" data-sort-direction="asc" data-sort="house">
+          House
+        </p>
+      </div>
+    </section>
+
+    <section class="info-section">
+      <p>Students in bla</p>
+      <p>Students with bla</p>
+      <p>Students blabla</p>
+    </section>
+    <main class="main-section" id="main-section"></main>
+
+    <template id="student">
+      <div class="student">
+        <img class="student-img" src="" alt="" data-field="img" />
+        <img class="student-house-img" src="" alt="" data-field="houseimg" />
+        <h2 class="student-name" data-field="name">Name Surname</h2>
+        <p class="student-details" data-field="gender">Details1</p>
+        <p class="student-details" data-field="house">Details1</p>
+        <button class="details-btn">Details</button>
+      </div>
+    </template>
+
+    <div id="student-modal" class="modal">
+      <div class="modal-content">
+        <div class="modal-student-img-wrapper">
+          <img class="student-img" src="" alt="" />
+          <img class="student-house-img" src="" alt="" />
         </div>
+        <div class="modal-student-details-wrapper">
+          <h2 class="student-name">Name Surname</h2>
+          <p class="student-details">Details1</p>
+          <div class="modal-student-button-wrapper">
+            <button class="details-btn">Expell</button>
+            <button class="details-btn">Promote</button>
+            <button class="details-btn">Set Prefect</button>
+          </div>
+        </div>
+        <span class="close">&times;</span>
       </div>
-      <span class="close">&times;</span>
-
-
     </div>
 
-  </div>
-
-  <footer></footer>
-</body>
-<script src="studentlist.js"></script>
-
+    <footer></footer>
+  </body>
+  <script src="studentlist.js"></script>
 </html>
