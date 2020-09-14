@@ -1,17 +1,42 @@
-body {
-  margin-left: 8%;
-  margin-right: 8%;
+:root {
+  --main-bg-color: #FBBA72;
+  --main-font-color: #000000;
+  --main-list-color: #CA5310;
+  --main-btn-color: #CA5310;
+  --main-list-element-color: #8F250C;
+  --secundary-font-color: #000000;
+  --secundary-list-element-color: #691E06;
+  --secundary-btn-color: #FC7532;
+
 }
 
+body {
+  background-color: var(--main-bg-color);
+  background-image: url("./wood-bg.jpg");
+  background-size: cover;
+  background-repeat: repeat;
+  background-attachment: scroll;
+  margin-left: 8%;
+  margin-right: 8%;
+  margin-top: 0;
+  font-family: 'Rubik', sans-serif;
+  ;
+}
+
+/* MODAL CONTENT */
+
 .title-section {
-  background-color: aliceblue;
+  background-image: url("./title-bg.jpg");
+  background-size: cover;
+  background-position-y: 50%;
   margin-bottom: 10vh;
+  width: 100%;
+  box-shadow: inset 0px 0px 10px 0px rgba(0, 0, 0, 1);
 }
 
 .title-wrapper {
   margin-left: auto;
   margin-right: auto;
-  width: 500px;
   display: flex;
   flex-flow: column;
   align-items: center;
@@ -19,13 +44,20 @@ body {
 }
 
 .title-img {
-  width: 200px;
-  height: 200px;
+  width: 25vw;
 }
 
 .title-h1 {
+  margin: 0;
+  font-family: 'Tangerine', cursive;
+  font-size: 7vw;
+  color: white;
+  text-shadow: 2px 2px #000000;
+  ;
   text-align: center;
 }
+
+/* FILTER MENU */
 
 .menu-section {
   display: flex;
@@ -38,7 +70,7 @@ body {
   align-items: center;
   justify-content: center;
   width: 200px;
-  background-color: red;
+  background-color: var(--main-list-color);
 }
 
 .menu-input {
@@ -49,13 +81,23 @@ body {
   font-size: 20px;
 }
 
+/* LIST */
+
 .main-section {
   display: flex;
   flex-flow: column;
   align-items: center;
   margin-bottom: 10vh;
-  background-color: lavender;
+  background-color: var(--main-list-color);
   padding: 20px 0;
+}
+
+.student:nth-child(even) {
+  background-color: var(--main-list-element-color);
+}
+
+.student:nth-child(odd) {
+  background-color: var(--secundary-list-element-color)
 }
 
 .student {
@@ -64,11 +106,11 @@ body {
   align-items: center;
   height: 100px;
   padding: 20px 20px;
-  background-color: antiquewhite;
   margin-bottom: 10px;
   min-width: 700px;
   width: 95%;
 }
+
 
 .student:last-child {
   margin-bottom: 0;
@@ -78,18 +120,132 @@ body {
   width: 100px;
   height: 100px;
   background-color: red;
+  margin: 0 10px;
+}
+
+.student-house-img {
+  width: 60px;
+  height: 60px;
+  background-color: blue;
 }
 
 .student-name {
   margin-left: 20px;
 }
 
+.student-details {
+  margin-left: 50px;
+}
+
 .details-btn {
   width: 200px;
   height: 50px;
   margin-left: auto;
+  box-shadow: inset 0px 1px 0px 0px #a6827e;
+  background-color: var(--main-list-color);
+  border-radius: 3px;
+  border: 1px solid #54381e;
+  display: inline-block;
+  cursor: pointer;
+  color: #ffffff;
+  font-family: Arial;
+  font-size: 13px;
+  padding: 6px 24px;
+  text-decoration: none;
+  text-shadow: 0px 1px 0px #4d3534;
 }
 
+
+.details-btn:hover {
+  background-color: var(--secundary-btn-color);
+}
+
+.details-btn:active {
+  position: relative;
+  top: 1px;
+}
+
+/* INFO */
+
 .info-section {
-  background-color: lightblue;
+  display: flex;
+  justify-content: space-around;
+}
+
+/* MODAL */
+.modal {
+  display: none;
+  position: fixed;
+  z-index: 1;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  overflow: auto;
+  background-color: rgb(0, 0, 0);
+  background-color: rgba(0, 0, 0, 0.4);
+}
+
+.modal-content {
+  display: flex;
+  background-color: #fefefe;
+  margin: 10% auto;
+  padding: 20px;
+  border: 1px solid #888;
+  width: 80%;
+}
+
+.close {
+  color: #aaa;
+  float: right;
+  font-size: 28px;
+  font-weight: bold;
+}
+
+.close:hover,
+.close:focus {
+  color: black;
+  text-decoration: none;
+  cursor: pointer;
+}
+
+/* MODAL CONTENT */
+.modal-student-img-wrapper {
+  display: flex;
+  flex-flow: column;
+  align-items: center;
+}
+
+.modal-student-img-wrapper .student-img {
+  width: 200px;
+  height: 200px;
+}
+
+.modal-student-img-wrapper .student-house-img {
+  margin-top: 15px;
+  width: 100px;
+  height: 100px;
+}
+
+.modal-student-details-wrapper {
+  width: 90%;
+  margin-left: 5vw;
+  display: flex;
+  flex-flow: column;
+  justify-content: flex-start;
+}
+
+.modal-student-details-wrapper .student-name {
+  margin-left: 0;
+}
+
+.modal-student-details-wrapper .student-details {
+  margin-left: 0;
+}
+
+.modal-student-button-wrapper {
+  display: flex;
+  justify-content: space-between;
+  margin-top: auto;
+  width: 90%;
 }

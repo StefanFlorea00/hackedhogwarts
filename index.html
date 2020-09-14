@@ -1,65 +1,96 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Document</title>
-    <link rel="stylesheet" href="style.css" />
-  </head>
-  <body>
-    <section class="title-section">
-      <div class="title-wrapper">
-        <img class="title-img" src="" alt="" />
-        <h1 class="title-h1">Hogwarts school</h1>
-      </div>
-    </section>
 
-    <section class="menu-section">
-      <div class="menu-wrapper">
-        <p class="menu-text">Filter:</p>
-        <select class="menu-input" name="filter" id="filter">
-          <option value="name">Name</option>
-          <option value="age">Age</option>
-        </select>
-      </div>
-      <div class="menu-wrapper">
-        <p class="menu-text">Filter:</p>
-        <select class="menu-input" name="sort" id="sort"></select>
-      </div>
-      <div class="menu-wrapper">
-        <p class="menu-text">Filter:</p>
-        <input class="menu-input" type="text" name="search" id="search" />
-      </div>
-    </section>
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Document</title>
+  <link href="https://fonts.googleapis.com/css2?family=Rubik:ital,wght@0,300;0,400;0,700;1,400&display=swap"
+    rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Tangerine:wght@700&display=swap" rel="stylesheet">
 
-    <main class="main-section">
-      <div class="student">
+  <link rel="stylesheet" href="style.css" />
+</head>
+
+<body>
+  <section class="title-section">
+    <div class="title-wrapper">
+      <img class="title-img" src="./hogwarts-logo.png" alt="" />
+      <h1 class=" title-h1">Hogwarts School</h1>
+    </div>
+  </section>
+
+  <section class="menu-section">
+    <div class="menu-wrapper">
+      <p class="menu-text">Filter: </p>
+      <select class="menu-input" name="filter" id="filter">
+        <option value="name">Name</option>
+        <option value="age">Age</option>
+      </select>
+    </div>
+    <div class="menu-wrapper">
+      <p class="menu-text">Sort: </p>
+      <select class="menu-input" name="sort" id="sort"></select>
+    </div>
+    <div class="menu-wrapper">
+      <p class="menu-text">Search: </p>
+      <input class="menu-input" type="text" name="search" id="search" />
+    </div>
+  </section>
+
+  <section class="info-section">
+    <p>Students in bla</p>
+    <p>Students with bla</p>
+    <p>Students blabla</p>
+  </section>
+  <main class="main-section">
+    <div class="student">
+      <img class="student-img" src="" alt="" />
+      <img class="student-house-img" src="" alt="" />
+      <h2 class="student-name">Name Surname</h2>
+      <p class="student-details">Details1</p>
+      <p class="student-details">Details1</p>
+      <button class="details-btn">Details</button>
+    </div>
+
+    <div class="student">
+      <img class="student-img" src="" alt="" />
+      <h2 class="student-name">Name Surname</h2>
+      <button class="details-btn">Details</button>
+    </div>
+
+    <div class="student">
+      <img class="student-img" src="" alt="" />
+      <h2 class="student-name">Name Surname</h2>
+      <button class="details-btn">Details</button>
+    </div>
+  </main>
+
+
+  <div id="student-modal" class="modal">
+    <div class="modal-content">
+      <div class="modal-student-img-wrapper">
         <img class="student-img" src="" alt="" />
-        <h2 class="student-name">Name Surname</h2>
-        <button class="details-btn">Details</button>
+        <img class="student-house-img" src="" alt="" />
       </div>
-
-      <div class="student">
-        <img class="student-img" src="" alt="" />
+      <div class="modal-student-details-wrapper">
         <h2 class="student-name">Name Surname</h2>
-        <button class="details-btn">Details</button>
+        <p class="student-details">Details1</p>
+        <div class="modal-student-button-wrapper">
+          <button class="details-btn">Expell</button>
+          <button class="details-btn">Promote</button>
+          <button class="details-btn">Set Prefect</button>
+        </div>
       </div>
+      <span class="close">&times;</span>
 
-      <div class="student">
-        <img class="student-img" src="" alt="" />
-        <h2 class="student-name">Name Surname</h2>
-        <button class="details-btn">Details</button>
-      </div>
-    </main>
 
-    <section class="info-section">
-      <h1>More info</h1>
-      <p>Students in bla</p>
-      <p>Students with bla</p>
-      <p>Students blabla</p>
-    </section>
+    </div>
 
-    <footer></footer>
-  </body>
-  <script src="studentlist.js"></script>
+  </div>
+
+  <footer></footer>
+</body>
+<script src="studentlist.js"></script>
+
 </html>
