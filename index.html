@@ -35,12 +35,36 @@
     </section>
 
     <section class="menu-section">
-      <div class="menu-wrapper">
+      <div class="menu-wrapper" id="filter-wrapper">
         <p class="menu-text">Filter by</p>
-        <select class="menu-input" name="filter" id="filter">
-          <option value="name">Name</option>
-          <option value="age">Age</option>
-        </select>
+        <img
+          src="img/gryffindor.png"
+          alt=""
+          data-action="filter"
+          data-filter="gryffindor"
+          class="filter-img"
+        />
+        <img
+          src="img/hufflepuff.png"
+          alt=""
+          data-action="filter"
+          data-filter="hufflepuff"
+          class="filter-img"
+        />
+        <img
+          src="img/slytherin.png"
+          alt=""
+          data-action="filter"
+          data-filter="slytherin"
+          class="filter-img"
+        />
+        <img
+          src="img/ravenclaw.png"
+          alt=""
+          data-action="filter"
+          data-filter="ravenclaw"
+          class="filter-img"
+        />
       </div>
       <div class="menu-wrapper" id="search-wrapper">
         <p class="menu-text">Search</p>
@@ -48,10 +72,10 @@
       </div>
       <div class="menu-wrapper" id="sort-wrapper">
         <p class="menu-text">Sort by</p>
-        <p data-action="sort" data-sort-direction="asc" data-sort="name">
+        <p data-action="sort" data-sort-direction="asc" data-sort="firstName">
           Forename
         </p>
-        <p data-action="sort" data-sort-direction="asc" data-sort="name">
+        <p data-action="sort" data-sort-direction="asc" data-sort="lastName">
           Surname
         </p>
         <p data-action="sort" data-sort-direction="asc" data-sort="gender">
@@ -77,6 +101,7 @@
         <h2 class="student-name" data-field="name">Name Surname</h2>
         <p class="student-details" data-field="gender">Details1</p>
         <p class="student-details" data-field="house">Details1</p>
+        <p class="student-details" data-field="expelled"></p>
         <button class="details-btn">Details</button>
       </div>
     </template>
@@ -84,16 +109,18 @@
     <div id="student-modal" class="modal">
       <div class="modal-content">
         <div class="modal-student-img-wrapper">
-          <img class="student-img" src="" alt="" />
-          <img class="student-house-img" src="" alt="" />
+          <img class="student-img" src="" alt="" data-field="img" />
+          <img class="student-house-img" src="" alt="" data-field="houseimg" />
         </div>
         <div class="modal-student-details-wrapper">
-          <h2 class="student-name">Name Surname</h2>
+          <h2 class="student-name" data-field="fname">First Name:</h2>
+          <h2 class="student-name" data-field="mname">Middle Name:</h2>
+          <h2 class="student-name" data-field="lname">Last Name:</h2>
           <p class="student-details">Details1</p>
           <div class="modal-student-button-wrapper">
-            <button class="details-btn">Expell</button>
-            <button class="details-btn">Promote</button>
-            <button class="details-btn">Set Prefect</button>
+            <button class="details-btn" id="expell-btn">Expell</button>
+            <button class="details-btn" id="promote-btn">Promote</button>
+            <button class="details-btn" id="prefect-btn">Set Prefect</button>
           </div>
         </div>
         <span class="close">&times;</span>

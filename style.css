@@ -91,21 +91,30 @@ nav ul li {
   display: flex;
   align-items: center;
   justify-content: space-around;
-  width: 200px;
+  width: 400px;
+  height: 100px;
   padding: 0 10px;
   background-color: var(--main-list-color);
-}
-
-#search-wrapper {
-  width: 400px;
 }
 
 #search-wrapper input {
   width: 100%;
 }
 
-#sort-wrapper {
-  width: 400px;
+.filter-img {
+  width: 40px;
+  filter: grayscale(100%);
+}
+
+.filter-img:hover {
+  cursor: pointer;
+  filter: grayscale(0%);
+  transform: scale(1.1);
+}
+
+.active {
+  filter: grayscale(0%);
+  transform: scale(1.1);
 }
 
 #sort-wrapper p:hover {
@@ -160,14 +169,11 @@ nav ul li {
 
 .student-img {
   width: 100px;
-  height: 100px;
-  background-color: red;
   margin: 0 10px;
 }
 
 .student-house-img {
   width: 60px;
-  height: 60px;
 }
 
 .student-name {
@@ -258,13 +264,11 @@ nav ul li {
 
 .modal-student-img-wrapper .student-img {
   width: 200px;
-  height: 200px;
 }
 
 .modal-student-img-wrapper .student-house-img {
   margin-top: 15px;
   width: 100px;
-  height: 100px;
 }
 
 .modal-student-details-wrapper {
@@ -288,4 +292,57 @@ nav ul li {
   justify-content: space-between;
   margin-top: auto;
   width: 90%;
+}
+
+/* HOUSE COLORS */
+.slytherin {
+  background-color: #0d6217;
+}
+
+.slytherin button {
+  background-color: #aaaaaa;
+  border: 1px solid #777777;
+}
+
+.slytherin button:hover {
+  background-color: #cccccc;
+}
+
+.gryffindor {
+  background-color: #7f0909;
+}
+
+.gryffindor button {
+  background-color: #ffc500;
+  border: 1px solid #c99a00;
+}
+
+.gryffindor button:hover {
+  background-color: #ffd54d;
+}
+
+.hufflepuff {
+  background-color: #eee117;
+}
+
+.hufflepuff button {
+  background-color: #aaaaaa;
+  border: 1px solid #777777;
+}
+
+.hufflepuff button:hover {
+  background-color: #cccccc;
+}
+
+.ravenclaw {
+  background-color: #000a90;
+}
+
+.ravenclaw button {
+  background-color: #946b2d;
+  border: 1px solid #5f4216;
+}
+
+.ravenclaw button:hover {
+  background-color: #c99c59;
 }

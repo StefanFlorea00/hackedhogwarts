@@ -1,10 +1,19 @@
 let allStudents = [];
 let displayedStudents = [];
+let expelledStudents = [];
 
 const Student = {
-  name: "",
+  fullName: "",
+  firstName: "",
+  lastName: "",
+  nickName: "",
+  middleName: "",
   gender: "",
   house: "",
+  img: "",
+  prefect: false,
+  squad: false,
+  expelled: false,
 };
 
 init();
@@ -16,19 +25,65 @@ function init() {
     displayList(allStudents);
   }, 50);
   addSort();
+  addFilter();
+  addSearch();
+}
+
+function addSearch() {
+  const search = document.querySelector("#search");
+  search.addEventListener("input", searchStudents);
+}
+
+function searchStudents() {
+  let value = this.value;
+  console.log(value);
+  let searchedStudents = [];
+  for (let i = 0; i < displayedStudents.length; i++) {
+    if (displayedStudents[i].fullName.search(value) != -1) {
+      searchedStudents.push(displayedStudents[i]);
+      displayedStudents = searchedStudents;
+    }
+    displayList(displayedStudents);
+  }
+  if (value == "") {
+    displayedStudents == allStudents;
+    displayList(displayedStudents);
+  }
 }
 
 function addFilter() {
-  const filter = document.querySelector("#filter");
-  filter.addEventListener("change", filterStudents);
+  const filters = document.querySelectorAll("[data-action=filter]");
+  let lastActive = filters[0];
+  let active = false;
+  for (const filter of filters) {
+    filter.addEventListener("click", function () {
+      if (!active) {
+        this.classList.toggle("active");
+        displayList(filterStudents(this.dataset.filter));
+        active = true;
+      } else if (filter.classList.contains("active")) {
+        document
+          .querySelector("#filter-wrapper .active")
+          .classList.toggle("active");
+        displayedStudents = allStudents;
+        displayList(allStudents);
+        active = false;
+      }
+      lastActive = this;
+    });
+  }
 }
 
-function filterStudents(type) {
-  if (type == "*") displayedStudents = allStudents;
-  else
-    displayedStudents = allStudents.filter(
-      (student) => student.fullname == type
-    );
+function filterStudents(field) {
+  displayedStudents = allStudents;
+  let filteredStudents = [];
+  displayedStudents = filterByField(field, displayedStudents);
+  return (filteredStudents = filterByField(field, displayedStudents));
+}
+
+function filterByField(field, array) {
+  console.log(field, array);
+  return array.filter((student) => student.house.toLowerCase() == field);
 }
 
 function addSort() {
@@ -71,11 +126,13 @@ function addModalEvents() {
   var modalSpan = document.querySelector(".close");
   modalSpan.onclick = function () {
     modal.style.display = "none";
+    modal.querySelector(".modal-content").className = "modal-content";
   };
 
   window.onclick = function (event) {
     if (event.target == modal) {
       modal.style.display = "none";
+      modal.querySelector(".modal-content").className = "modal-content";
     }
   };
 }
@@ -96,11 +153,52 @@ function prepareObjects(jsonData) {
 function prepareObject(jsonObject) {
   const student = Object.create(Student);
 
-  student.fullname = jsonObject.fullname;
-  student.gender = jsonObject.gender;
-  student.house = jsonObject.house;
+  console.log(getStudentAttr(jsonObject, "fullname"));
 
+  student.fullName = getStudentAttr(jsonObject, "fullname");
+  student.firstName = capitalizeFirstLetter(getStudentFirstName(jsonObject));
+  student.middleName = capitalizeFirstLetter(getStudentMiddleNames(jsonObject));
+  student.lastName = capitalizeFirstLetter(getStudentLastName(jsonObject));
+  student.gender = capitalizeFirstLetter(getStudentAttr(jsonObject, "gender"));
+  student.house = capitalizeFirstLetter(getStudentAttr(jsonObject, "house"));
+  student.img = getStudentImg(student.firstName, student.lastName);
   return student;
+}
+
+function getStudentAttr(jsonObject, attr) {
+  return jsonObject[attr].toLowerCase().trim();
+}
+
+function getStudentFirstName(jsonObject) {
+  return getStudentAttr(jsonObject, "fullname").split(" ")[0];
+}
+
+function getStudentMiddleNames(jsonObject) {
+  const fullName = getStudentAttr(jsonObject, "fullname");
+  if (fullName.split(" ").length > 2) {
+    const middleName = fullName.slice(
+      fullName.indexOf(" ") + 1,
+      fullName.lastIndexOf(" ")
+    );
+    return middleName;
+  } else return "";
+}
+
+function getStudentLastName(jsonObject) {
+  const fullName = getStudentAttr(jsonObject, "fullname");
+  if (fullName.split(" ").length <= 1) {
+    return "[not set]";
+  }
+  return fullName.slice(fullName.lastIndexOf(" ") + 1, fullName.length);
+}
+
+function getStudentImg(fname, lname) {
+  return lname.toLowerCase() + "_" + fname.toLowerCase().charAt(0);
+}
+
+function capitalizeFirstLetter(name) {
+  if (name) return name.charAt(0).toUpperCase() + name.slice(1);
+  else return "";
 }
 
 function displayList(students) {
@@ -113,23 +211,58 @@ function displayStudent(student) {
     .querySelector("template#student")
     .content.cloneNode(true);
 
-  clone.querySelector("[data-field=name]").textContent = student.fullname;
+  clone.querySelector("[data-field=name]").textContent =
+    student.firstName + " " + student.middleName + " " + student.lastName;
   clone.querySelector("[data-field=gender]").textContent = student.gender;
   clone.querySelector("[data-field=house]").textContent = student.house;
+  clone.querySelector("[data-field=img]").src =
+    "./img/student-img/" + student.img + ".png";
 
   clone.querySelector("[data-field=houseimg]").src =
     "./img/" + student.house.trim().toLowerCase() + ".png";
   let modalBtn = clone.querySelector(".details-btn");
 
+  if (student.expelled) {
+    clone.querySelector(".student").style.backgroundColor = "red";
+    clone.querySelector("[data-field=expelled]").textContent = "EXPELLED";
+  }
+
   modalBtn.addEventListener("click", function () {
     displayStudentDetails(student);
-    console.log("hahga");
   });
   document.querySelector("#main-section").appendChild(clone);
 }
 
 function displayStudentDetails(student) {
-  var modal = document.querySelector("#student-modal");
-  modal.querySelector(".student-name").textContent = student.fullname;
+  const modal = document.querySelector("#student-modal");
+  modal
+    .querySelector(".modal-content")
+    .classList.add(student.house.toLowerCase());
+  modal.querySelector(
+    "[data-field=fname]"
+  ).textContent = `First name: ${student.firstName}`;
+  modal.querySelector(
+    "[data-field=mname]"
+  ).textContent = `Middle name: ${student.middleName}`;
+  modal.querySelector(
+    "[data-field=lname]"
+  ).textContent = `Last name: ${student.lastName}`;
   modal.style.display = "block";
+  modal.querySelector("[data-field=houseimg]").src =
+    "./img/" + student.house.trim().toLowerCase() + ".png";
+  modal.querySelector("[data-field=img]").src =
+    "./img/student-img/" + student.img + ".png";
+
+  modal.querySelector("#expell-btn").addEventListener("click", function () {
+    expellStudent(student);
+  });
+}
+
+function expellStudent(student) {
+  if (!student.expelled) {
+    student.expelled = true;
+    expelledStudents.push(student);
+    console.log(expelledStudents);
+    displayList(displayedStudents);
+  }
 }
