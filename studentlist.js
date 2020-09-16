@@ -19,14 +19,15 @@ const Student = {
 init();
 
 function init() {
-  addModalEvents();
   loadJSON("https://petlatkea.dk/2020/hogwarts/students.json");
-  setTimeout(() => {
-    displayList(allStudents);
-  }, 50);
+  addModalEvents();
   addSort();
   addFilter();
   addSearch();
+  setTimeout(() => {
+    displayList(allStudents);
+    updateListInfo();
+  }, 50);
 }
 
 function addSearch() {
@@ -34,6 +35,7 @@ function addSearch() {
   search.addEventListener("input", searchStudents);
 }
 
+//TODO: Fix search empty
 function searchStudents() {
   let value = this.value;
   console.log(value);
@@ -42,8 +44,8 @@ function searchStudents() {
     if (displayedStudents[i].fullName.search(value) != -1) {
       searchedStudents.push(displayedStudents[i]);
       displayedStudents = searchedStudents;
+      displayList(displayedStudents);
     }
-    displayList(displayedStudents);
   }
   if (value == "") {
     displayedStudents == allStudents;
@@ -51,6 +53,7 @@ function searchStudents() {
   }
 }
 
+//TODO: Fix filtering
 function addFilter() {
   const filters = document.querySelectorAll("[data-action=filter]");
   let lastActive = filters[0];
@@ -72,6 +75,16 @@ function addFilter() {
       lastActive = this;
     });
   }
+}
+
+function updateListInfo() {
+  const infoSection = document.querySelector("#info-section");
+  infoSection.querySelector("[data-info=all]").textContent =
+    "Total students: " + allStudents.length;
+  infoSection.querySelector("[data-info=displayed]").textContent =
+    "Displayed students: " + displayedStudents.length;
+  infoSection.querySelector("[data-info=expelled]").textContent =
+    "Expelled students: " + expelledStudents.length;
 }
 
 function filterStudents(field) {
@@ -204,6 +217,7 @@ function capitalizeFirstLetter(name) {
 function displayList(students) {
   document.querySelector("#main-section").innerHTML = "";
   students.forEach(displayStudent);
+  updateListInfo();
 }
 
 function displayStudent(student) {
