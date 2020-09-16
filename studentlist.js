@@ -1,6 +1,9 @@
+"use strict";
+
 let allStudents = [];
 let displayedStudents = [];
 let expelledStudents = [];
+let houses = [];
 
 const Student = {
   fullName: "",
@@ -11,10 +14,16 @@ const Student = {
   gender: "",
   house: "",
   img: "",
+  bloodStatus: "",
   prefect: false,
   squad: false,
   expelled: false,
 };
+
+const House = {
+  name: "",
+  students: [],
+}
 
 init();
 
@@ -27,7 +36,7 @@ function init() {
   setTimeout(() => {
     displayList(allStudents);
     updateListInfo();
-  }, 50);
+  }, 150);
 }
 
 function addSearch() {
@@ -140,14 +149,29 @@ function addModalEvents() {
   modalSpan.onclick = function () {
     modal.style.display = "none";
     modal.querySelector(".modal-content").className = "modal-content";
+    removeBtnEvents(modal);
   };
 
   window.onclick = function (event) {
     if (event.target == modal) {
       modal.style.display = "none";
       modal.querySelector(".modal-content").className = "modal-content";
+      removeBtnEvents(modal);
     }
   };
+}
+
+function removeBtnEvents(modal) {
+  const modalContent = modal.querySelector(".modal-content");
+
+  const expellBtn = modalContent.querySelector("#expell-btn"),
+    expellBtnClone = expellBtn.cloneNode(true);
+  expellBtn.parentNode.replaceChild(expellBtnClone, expellBtn);
+
+  const prefectBtn = modalContent.querySelector("#prefect-btn"),
+    prefectBtnClone = prefectBtn.cloneNode(true);
+  prefectBtn.parentNode.replaceChild(prefectBtnClone, prefectBtn);
+
 }
 
 async function loadJSON(jsonLink) {
@@ -160,7 +184,20 @@ async function loadJSON(jsonLink) {
 function prepareObjects(jsonData) {
   allStudents = jsonData.map(prepareObject);
   displayedStudents = allStudents;
+  addHouses();
+  console.log(houses);
   return allStudents;
+}
+
+function addHouses() {
+  for (let i = 0; i <= 3; i++) {
+    let house = Object.create(House);
+    if (i == 0) house.name = "gryffindor";
+    else if (i == 1) house.name = "slytherin";
+    else if (i == 2) house.name = "hufflepuff";
+    else if (i == 3) house.name = "ravenclaw";
+    houses.push(house);
+  }
 }
 
 function prepareObject(jsonObject) {
@@ -270,13 +307,33 @@ function displayStudentDetails(student) {
   modal.querySelector("#expell-btn").addEventListener("click", function () {
     expellStudent(student);
   });
+  modal.querySelector("#prefect-btn").addEventListener("click", function () {
+    setPrefect(student, getHouse(student));
+  });
+
 }
 
+function getHouse(student) {
+  for (let i = 0; i < 3; i++) {
+    if (student.house.toLowerCase() == houses[i].name)
+      return houses[i];
+  }
+}
+
+
 function expellStudent(student) {
+  console.log(student);
   if (!student.expelled) {
     student.expelled = true;
     expelledStudents.push(student);
     console.log(expelledStudents);
     displayList(displayedStudents);
+  }
+}
+
+function setPrefect(student, house) {
+  if (house.students.length < 2) {
+    house.students.push(student);
+    console.log(house, house.students);
   }
 }
