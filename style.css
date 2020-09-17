@@ -214,8 +214,30 @@ nav ul li {
 /* INFO */
 
 .info-section {
+  width: 80%;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.info-section .basic-wrapper {
   display: flex;
-  justify-content: space-around;
+  justify-content: flex-start;
+}
+
+.basic-wrapper p {
+  margin-right: 20px;
+}
+
+.info-section .advanced-wrapper {
+  height: 50px;
+  overflow: hidden;
+  transition: 0.3s all;
+  background-color: var(--main-list-color);
+  padding: 0 20px;
+}
+
+.info-section .advanced-wrapper:hover {
+  height: 200px;
 }
 
 /* MODAL */

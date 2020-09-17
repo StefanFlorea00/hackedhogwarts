@@ -3,7 +3,7 @@
 let allStudents = [];
 let displayedStudents = [];
 let expelledStudents = [];
-let houses = [];
+let prefectHouses = [];
 
 const Student = {
   fullName: "",
@@ -14,7 +14,7 @@ const Student = {
   gender: "",
   house: "",
   img: "",
-  bloodStatus: "",
+  bloodStatus: "pure",
   prefect: false,
   squad: false,
   expelled: false,
@@ -23,7 +23,7 @@ const Student = {
 const House = {
   name: "",
   students: [],
-}
+};
 
 init();
 
@@ -35,7 +35,6 @@ function init() {
   addSearch();
   setTimeout(() => {
     displayList(allStudents);
-    updateListInfo();
   }, 150);
 }
 
@@ -94,7 +93,37 @@ function updateListInfo() {
     "Displayed students: " + displayedStudents.length;
   infoSection.querySelector("[data-info=expelled]").textContent =
     "Expelled students: " + expelledStudents.length;
+  infoSection.querySelector("[data-info=inquisitorial]").textContent =
+    "Inquisitorial Squad Members: " + getSquadStudents(allStudents);
+  infoSection.querySelector("[data-info=prefects]").textContent =
+    "Prefects: " + getAllPrefects(prefectHouses);
 }
+
+function getSquadStudents(students) {
+  let j = 0;
+  for (let i = 0; i < students.length; i++) {
+    if (students[i].squad) j++;
+  }
+  return j;
+}
+
+function getAllPrefects(houses) {
+  let allPrefects = [];
+  for (let i = 0; i < houses.length; i++) {
+    for (let j = 0; j < houses[i].students.length; j++) {
+      allPrefects.push(
+        houses[i].students[j].firstName.charAt(0) +
+          " " +
+          houses[i].students[j].lastName
+      );
+    }
+  }
+  return allPrefects;
+}
+// for (let i = 0; i < array.length; i++) {
+//   if (array[i].prefect == true)
+//     allPrefects.push(array[i].firstName.charAt(0) + " " + array[i].lastName);
+// }
 
 function filterStudents(field) {
   displayedStudents = allStudents;
@@ -172,6 +201,9 @@ function removeBtnEvents(modal) {
     prefectBtnClone = prefectBtn.cloneNode(true);
   prefectBtn.parentNode.replaceChild(prefectBtnClone, prefectBtn);
 
+  const promoteBtn = modalContent.querySelector("#promote-btn"),
+    promoteBtnclone = promoteBtn.cloneNode(true);
+  promoteBtn.parentNode.replaceChild(promoteBtnclone, promoteBtn);
 }
 
 async function loadJSON(jsonLink) {
@@ -185,24 +217,25 @@ function prepareObjects(jsonData) {
   allStudents = jsonData.map(prepareObject);
   displayedStudents = allStudents;
   addHouses();
-  console.log(houses);
+  console.log(prefectHouses);
   return allStudents;
 }
 
 function addHouses() {
   for (let i = 0; i <= 3; i++) {
     let house = Object.create(House);
+    house.students = [];
     if (i == 0) house.name = "gryffindor";
     else if (i == 1) house.name = "slytherin";
     else if (i == 2) house.name = "hufflepuff";
     else if (i == 3) house.name = "ravenclaw";
-    houses.push(house);
+    prefectHouses.push(house);
   }
 }
 
 function prepareObject(jsonObject) {
   const student = Object.create(Student);
-
+  //JSON.parse(JSON.stringify(Student))
   console.log(getStudentAttr(jsonObject, "fullname"));
 
   student.fullName = getStudentAttr(jsonObject, "fullname");
@@ -286,6 +319,34 @@ function displayStudent(student) {
 
 function displayStudentDetails(student) {
   const modal = document.querySelector("#student-modal");
+  console.log(student);
+  updateStudentDetailsDisplay(modal, student);
+  addStudentDisplayEvents(modal, student);
+}
+
+function addStudentDisplayEvents(modal, student) {
+  modal.querySelector("#expell-btn").addEventListener("click", function () {
+    expellStudent(student);
+  });
+
+  modal.querySelector("#prefect-btn").addEventListener("click", function () {
+    if (isPrefectFromHouse(student, getPrefectHouse(student))) {
+      setPrefect(student, getPrefectHouse(student), false);
+    } else {
+      setPrefect(student, getPrefectHouse(student), true);
+    }
+  });
+
+  modal.querySelector("#promote-btn").addEventListener("click", function () {
+    if (isInSquad(student)) {
+      setSquad(student, false);
+    } else {
+      setSquad(student, true);
+    }
+  });
+}
+
+function updateStudentDetailsDisplay(modal, student) {
   modal
     .querySelector(".modal-content")
     .classList.add(student.house.toLowerCase());
@@ -304,22 +365,48 @@ function displayStudentDetails(student) {
   modal.querySelector("[data-field=img]").src =
     "./img/student-img/" + student.img + ".png";
 
-  modal.querySelector("#expell-btn").addEventListener("click", function () {
-    expellStudent(student);
-  });
-  modal.querySelector("#prefect-btn").addEventListener("click", function () {
-    setPrefect(student, getHouse(student));
-  });
+  console.log(
+    "PREF:",
+    isPrefectFromHouse(student, getPrefectHouse(student)),
+    "SQUAD:",
+    isInSquad(student)
+  );
+  if (isPrefectFromHouse(student, getPrefectHouse(student))) {
+    modal.querySelector("#prefect-btn").textContent = "Remove Prefect";
+  } else {
+    modal.querySelector("#prefect-btn").textContent = "Set Prefect";
+  }
 
-}
-
-function getHouse(student) {
-  for (let i = 0; i < 3; i++) {
-    if (student.house.toLowerCase() == houses[i].name)
-      return houses[i];
+  if (isInSquad(student)) {
+    modal.querySelector("#promote-btn").textContent = "Remove From Squad";
+  } else {
+    modal.querySelector("#promote-btn").textContent = "Add to Squad";
   }
 }
 
+function getPrefectHouse(student) {
+  for (let i = 0; i <= 3; i++) {
+    if (student.house.toLowerCase() === prefectHouses[i].name) {
+      return prefectHouses[i];
+    }
+  }
+}
+
+function isInSquad(student) {
+  return student.squad;
+}
+
+function isPrefect(student) {
+  if (student.prefect) return true;
+  else return false;
+}
+
+function isPrefectFromHouse(student, house) {
+  for (let i = 0; i < house.students.length; i++) {
+    if (student == house.students[i]) return true;
+  }
+  return false;
+}
 
 function expellStudent(student) {
   console.log(student);
@@ -331,9 +418,33 @@ function expellStudent(student) {
   }
 }
 
-function setPrefect(student, house) {
-  if (house.students.length < 2) {
-    house.students.push(student);
-    console.log(house, house.students);
+function setSquad(student, setter) {
+  if (
+    student.bloodStatus == "pure" &&
+    student.house.toLowerCase() == "slytherin"
+  ) {
+    student.squad = setter;
+    console.log("PURE", student.squad);
+  } else {
+    console.log("NOT PURE");
   }
+  updateListInfo();
+}
+
+function setPrefect(student, house, setter) {
+  if (setter) {
+    if (house.students.length < 2) {
+      house.students.push(student);
+    } else if (house.students.length == 2) {
+      //TODO add notification
+      house.students.pop();
+      house.students.push(student);
+    }
+  } else {
+    for (let i = 0; i <= house.students.length; i++) {
+      if (student == house.students[i]) house.students.splice(i, 1);
+    }
+  }
+  console.log(house.name, house.students);
+  updateListInfo();
 }
