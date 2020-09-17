@@ -4,6 +4,7 @@ let allStudents = [];
 let displayedStudents = [];
 let expelledStudents = [];
 let prefectHouses = [];
+let allFamilies = [];
 
 const Student = {
   fullName: "",
@@ -14,7 +15,7 @@ const Student = {
   gender: "",
   house: "",
   img: "",
-  bloodStatus: "pure",
+  bloodStatus: "muggle",
   prefect: false,
   squad: false,
   expelled: false,
@@ -25,10 +26,19 @@ const House = {
   students: [],
 };
 
+const Family = {
+  half: [],
+  pure: [],
+}
+
 init();
 
 function init() {
-  loadJSON("https://petlatkea.dk/2020/hogwarts/students.json");
+  const request = async () => {
+    loadJSON("https://petlatkea.dk/2020/hogwarts/families.json", "families");
+    loadJSON("https://petlatkea.dk/2020/hogwarts/students.json", "students");
+  }
+  request();
   addModalEvents();
   addSort();
   addFilter();
@@ -56,7 +66,7 @@ function searchStudents() {
     }
   }
   if (value == "") {
-    displayedStudents == allStudents;
+    displayedStudents = allStudents;
     displayList(displayedStudents);
   }
 }
@@ -113,8 +123,8 @@ function getAllPrefects(houses) {
     for (let j = 0; j < houses[i].students.length; j++) {
       allPrefects.push(
         houses[i].students[j].firstName.charAt(0) +
-          " " +
-          houses[i].students[j].lastName
+        " " +
+        houses[i].students[j].lastName
       );
     }
   }
@@ -206,19 +216,21 @@ function removeBtnEvents(modal) {
   promoteBtn.parentNode.replaceChild(promoteBtnclone, promoteBtn);
 }
 
-async function loadJSON(jsonLink) {
+async function loadJSON(jsonLink, type) {
   const response = await fetch(jsonLink);
   const jsonData = await response.json();
 
-  prepareObjects(jsonData);
+  prepareObjects(jsonData, type);
 }
 
-function prepareObjects(jsonData) {
-  allStudents = jsonData.map(prepareObject);
-  displayedStudents = allStudents;
-  addHouses();
-  console.log(prefectHouses);
-  return allStudents;
+function prepareObjects(jsonData, type) {
+  if (type == "students") {
+    allStudents = jsonData.map(prepareObjectStudent);
+    displayedStudents = allStudents;
+    addHouses();
+  } else if (type == "families") {
+    allFamilies = prepareObjectFamilies(jsonData);
+  }
 }
 
 function addHouses() {
@@ -233,7 +245,7 @@ function addHouses() {
   }
 }
 
-function prepareObject(jsonObject) {
+function prepareObjectStudent(jsonObject) {
   const student = Object.create(Student);
   //JSON.parse(JSON.stringify(Student))
   console.log(getStudentAttr(jsonObject, "fullname"));
@@ -245,7 +257,27 @@ function prepareObject(jsonObject) {
   student.gender = capitalizeFirstLetter(getStudentAttr(jsonObject, "gender"));
   student.house = capitalizeFirstLetter(getStudentAttr(jsonObject, "house"));
   student.img = getStudentImg(student.firstName, student.lastName);
+  student.bloodStatus = setStudentBloodStatus(student.lastName);
+
   return student;
+}
+
+function prepareObjectFamilies(jsonObject) {
+  const families = Object.create(Family);
+
+  families.half = jsonObject.half;
+  families.pure = jsonObject.pure;
+
+  return families;
+}
+
+function setStudentBloodStatus(studentName) {
+  if (allFamilies.half.find(familyName => familyName == studentName)) {
+    return "half";
+  } else
+  if (allFamilies.pure.find(familyName => familyName == studentName)) {
+    return "pure";
+  } else return "muggle";
 }
 
 function getStudentAttr(jsonObject, attr) {
@@ -299,6 +331,7 @@ function displayStudent(student) {
     student.firstName + " " + student.middleName + " " + student.lastName;
   clone.querySelector("[data-field=gender]").textContent = student.gender;
   clone.querySelector("[data-field=house]").textContent = student.house;
+  clone.querySelector("[data-field=blood]").textContent = student.bloodStatus;
   clone.querySelector("[data-field=img]").src =
     "./img/student-img/" + student.img + ".png";
 
@@ -332,16 +365,24 @@ function addStudentDisplayEvents(modal, student) {
   modal.querySelector("#prefect-btn").addEventListener("click", function () {
     if (isPrefectFromHouse(student, getPrefectHouse(student))) {
       setPrefect(student, getPrefectHouse(student), false);
+      modal.querySelector("#prefect-btn").textContent = "Set Prefect";
+
     } else {
       setPrefect(student, getPrefectHouse(student), true);
+      modal.querySelector("#prefect-btn").textContent = "Remove Prefect";
+
     }
   });
 
   modal.querySelector("#promote-btn").addEventListener("click", function () {
     if (isInSquad(student)) {
       setSquad(student, false);
+      modal.querySelector("#promote-btn").textContent = "Add to Squad";
+
     } else {
       setSquad(student, true);
+      modal.querySelector("#promote-btn").textContent = "Remove From Squad";
+
     }
   });
 }
