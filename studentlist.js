@@ -6,6 +6,9 @@ let expelledStudents = [];
 let prefectHouses = [];
 let allFamilies = [];
 
+const HACK_REMOVE_SQUAD_INTERVAL = 8000;
+let HACKED = false;
+
 const Student = {
   fullName: "",
   firstName: "",
@@ -29,7 +32,7 @@ const House = {
 const Family = {
   half: [],
   pure: [],
-}
+};
 
 init();
 
@@ -37,15 +40,21 @@ function init() {
   const request = async () => {
     loadJSON("https://petlatkea.dk/2020/hogwarts/families.json", "families");
     loadJSON("https://petlatkea.dk/2020/hogwarts/students.json", "students");
-  }
+  };
   request();
+
   addModalEvents();
   addSort();
   addFilter();
   addSearch();
+  addHackTheSystem();
   setTimeout(() => {
     displayList(allStudents);
   }, 150);
+}
+
+function addHackTheSystem() {
+  document.querySelector(".title-img").addEventListener("click", hackTheSystem);
 }
 
 function addSearch() {
@@ -97,6 +106,7 @@ function addFilter() {
 
 function updateListInfo() {
   const infoSection = document.querySelector("#info-section");
+
   infoSection.querySelector("[data-info=all]").textContent =
     "Total students: " + allStudents.length;
   infoSection.querySelector("[data-info=displayed]").textContent =
@@ -123,8 +133,8 @@ function getAllPrefects(houses) {
     for (let j = 0; j < houses[i].students.length; j++) {
       allPrefects.push(
         houses[i].students[j].firstName.charAt(0) +
-        " " +
-        houses[i].students[j].lastName
+          " " +
+          houses[i].students[j].lastName
       );
     }
   }
@@ -162,7 +172,6 @@ function addSort() {
 }
 
 function sortStudents(field, direction) {
-  let sortedStudents = [];
   return (sortedStudents = sortByField(field, displayedStudents, direction));
 }
 
@@ -183,8 +192,8 @@ function sortByField(field, array, direction) {
 }
 
 function addModalEvents() {
-  var modal = document.querySelector("#student-modal");
-  var modalSpan = document.querySelector(".close");
+  const modal = document.querySelector("#student-modal");
+  const modalSpan = document.querySelector(".close");
   modalSpan.onclick = function () {
     modal.style.display = "none";
     modal.querySelector(".modal-content").className = "modal-content";
@@ -272,10 +281,9 @@ function prepareObjectFamilies(jsonObject) {
 }
 
 function setStudentBloodStatus(studentName) {
-  if (allFamilies.half.find(familyName => familyName == studentName)) {
+  if (allFamilies.half.find((familyName) => familyName == studentName)) {
     return "half";
-  } else
-  if (allFamilies.pure.find(familyName => familyName == studentName)) {
+  } else if (allFamilies.pure.find((familyName) => familyName == studentName)) {
     return "pure";
   } else return "muggle";
 }
@@ -302,6 +310,7 @@ function getStudentMiddleNames(jsonObject) {
 function getStudentLastName(jsonObject) {
   const fullName = getStudentAttr(jsonObject, "fullname");
   if (fullName.split(" ").length <= 1) {
+    //FIXME
     return "[not set]";
   }
   return fullName.slice(fullName.lastIndexOf(" ") + 1, fullName.length);
@@ -366,11 +375,9 @@ function addStudentDisplayEvents(modal, student) {
     if (isPrefectFromHouse(student, getPrefectHouse(student))) {
       setPrefect(student, getPrefectHouse(student), false);
       modal.querySelector("#prefect-btn").textContent = "Set Prefect";
-
     } else {
       setPrefect(student, getPrefectHouse(student), true);
       modal.querySelector("#prefect-btn").textContent = "Remove Prefect";
-
     }
   });
 
@@ -378,11 +385,9 @@ function addStudentDisplayEvents(modal, student) {
     if (isInSquad(student)) {
       setSquad(student, false);
       modal.querySelector("#promote-btn").textContent = "Add to Squad";
-
     } else {
       setSquad(student, true);
       modal.querySelector("#promote-btn").textContent = "Remove From Squad";
-
     }
   });
 }
@@ -453,6 +458,10 @@ function expellStudent(student) {
   console.log(student);
   if (!student.expelled) {
     student.expelled = true;
+    const studentIndex = allStudents.findIndex(
+      (searchedStudent) => searchedStudent == student
+    );
+    if (studentIndex > -1) allStudents.splice(studentIndex, 1);
     expelledStudents.push(student);
     console.log(expelledStudents);
     displayList(displayedStudents);
@@ -488,4 +497,90 @@ function setPrefect(student, house, setter) {
   }
   console.log(house.name, house.students);
   updateListInfo();
+}
+
+function hackTheSystem() {
+  HACKED = true;
+  changeTheme(HACKED);
+  hackBlood();
+  hackStudent();
+  hackInquisitorialSquad();
+}
+
+function hackStudent() {
+  const newStudent = addHackerStudent();
+  allStudents.unshift(newStudent);
+}
+
+function addHackerStudent() {
+  let student = Object.create(Student);
+  student.firstName = "Stefan";
+  student.middleName = "Andrei";
+  student.lastName = "Florea";
+  student.gender = "boy";
+  student.house = "Gryffindor";
+  student.bloodStatus = "pure";
+
+  console.log(student);
+  return student;
+}
+
+function hackBlood() {
+  for (let i = 0; i < allStudents.length; i++) {
+    if (allStudents[i].bloodStatus != "pure")
+      allStudents[i].bloodStatus = "pure";
+    else allStudents[i].bloodStatus = randomizeBloodStatus();
+  }
+  displayList(displayedStudents);
+}
+
+function randomizeBloodStatus() {
+  switch (getRandomInt(2)) {
+    case 0:
+      console.log("muggle");
+      return "muggle";
+    case 1:
+      console.log("half");
+      return "half";
+  }
+}
+
+function getRandomInt(max) {
+  return Math.floor(Math.random() * Math.floor(max));
+}
+
+function hackInquisitorialSquad() {
+  setInterval(() => {
+    if (findSquadStudents(allStudents).isFound) {
+      allStudents[findSquadStudents(allStudents).index].squad = false;
+      updateListInfo();
+    }
+  }, HACK_REMOVE_SQUAD_INTERVAL);
+}
+
+function findSquadStudents(array) {
+  for (let i = 0; i < array.length; i++) {
+    if (array[i].squad == true)
+      return {
+        isFound: true,
+        index: i,
+      };
+  }
+  return false;
+}
+
+function changeTheme(hacked) {
+  if (hacked) {
+    let root = document.documentElement;
+    root.style.setProperty("--main-bg-color", "#000000");
+    document.querySelector("body").style.backgroundColor = "black";
+    document.querySelector("body").style.fontFamily = "'VT323', cursive";
+    root.style.setProperty("--main-font-color", "#003603");
+    root.style.setProperty("--main-list-color", "#00b809");
+    root.style.setProperty("--main-btn-color", "#000000");
+    root.style.setProperty("--main-list-element-color", "#007d06");
+    root.style.setProperty("--secundary-list-element-color", "#006b05");
+    root.style.setProperty("--secundary-btn-color", "#000000");
+  } else {
+  }
 }
