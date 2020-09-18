@@ -172,6 +172,7 @@ function addSort() {
 }
 
 function sortStudents(field, direction) {
+  let sortedStudents;
   return (sortedStudents = sortByField(field, displayedStudents, direction));
 }
 
@@ -517,7 +518,7 @@ function addHackerStudent() {
   student.firstName = "Stefan";
   student.middleName = "Andrei";
   student.lastName = "Florea";
-  student.gender = "boy";
+  student.gender = "Boy";
   student.house = "Gryffindor";
   student.bloodStatus = "pure";
 
@@ -569,18 +570,15 @@ function findSquadStudents(array) {
   return false;
 }
 
-function changeTheme(hacked) {
-  if (hacked) {
-    let root = document.documentElement;
-    root.style.setProperty("--main-bg-color", "#000000");
-    document.querySelector("body").style.backgroundColor = "black";
-    document.querySelector("body").style.fontFamily = "'VT323', cursive";
-    root.style.setProperty("--main-font-color", "#003603");
-    root.style.setProperty("--main-list-color", "#00b809");
-    root.style.setProperty("--main-btn-color", "#000000");
-    root.style.setProperty("--main-list-element-color", "#007d06");
-    root.style.setProperty("--secundary-list-element-color", "#006b05");
-    root.style.setProperty("--secundary-btn-color", "#000000");
-  } else {
-  }
+function changeTheme() {
+  let root = document.documentElement;
+  root.style.setProperty("--main-bg-color", "#000000");
+  document.querySelector("body").style.backgroundColor = "black";
+  document.querySelector("body").style.fontFamily = "'VT323', cursive";
+  root.style.setProperty("--main-font-color", "#003603");
+  root.style.setProperty("--main-list-color", "#00b809");
+  root.style.setProperty("--main-btn-color", "#000000");
+  root.style.setProperty("--main-list-element-color", "#007d06");
+  root.style.setProperty("--secundary-list-element-color", "#006b05");
+  root.style.setProperty("--secundary-btn-color", "#000000");
 }
