@@ -22,6 +22,7 @@ const Student = {
   prefect: false,
   squad: false,
   expelled: false,
+  hacker: false,
 };
 
 const House = {
@@ -479,6 +480,12 @@ function updateStudentDetailsDisplay(modal, student) {
 
   modal.querySelector("#warning").style.display = "none";
 
+  if (student.hacker) {
+    modal.querySelector("#expell-btn").style.pointerEvents = "none";
+    modal.querySelector("[data-field=details3]").textContent =
+      "I'm in the mainframe";
+  }
+
   if (student.expelled) {
     modal.querySelector("#prefect-btn").style.pointerEvents = "none";
     modal.querySelector("#promote-btn").style.pointerEvents = "none";
@@ -607,6 +614,7 @@ function hackTheSystem() {
 function hackStudent() {
   const newStudent = createHackerStudent();
   allStudents.unshift(newStudent);
+  displayList(allStudents);
 }
 
 function createHackerStudent() {
@@ -617,6 +625,8 @@ function createHackerStudent() {
   student.gender = "Boy";
   student.house = "Gryffindor";
   student.bloodStatus = "pure";
+  student.img = "hacker";
+  student.hacker = true;
 
   console.log(student);
   return student;

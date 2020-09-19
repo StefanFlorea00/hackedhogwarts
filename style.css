@@ -35,17 +35,20 @@ body {
 
 nav ul {
   display: flex;
+  justify-content: flex-start;
   align-items: center;
-  justify-content: space-around;
   height: 50px;
   background-color: var(--main-list-element-color);
   list-style-type: none;
   margin: 0;
-  padding: 0;
+  padding: 10px 50px;
 }
 
 nav ul li {
   background-color: var(--secundary-list-element-color);
+  margin-right: 20px;
+  height: 20px;
+  padding: 5px 10px;
 }
 
 /* MODAL CONTENT */
@@ -311,11 +314,11 @@ nav ul li {
 .modal-content {
   display: flex;
   background-color: #fefefe;
-  background-image: url("./img/lined_paper.png");
+  /* background-image: url("./img/lined_paper.png");
   background-blend-mode: multiply;
   background-size: 120%;
-  background-position: center;
-  font-family: "Dancing Script", cursive;
+  background-position: center; */
+  /* font-family: "Dancing Script", cursive; */
   margin: 5% auto;
   padding: 20px;
   width: 30%;
@@ -346,13 +349,11 @@ nav ul li {
 
 .modal-student-img-wrapper .student-img {
   width: 200px;
-  filter: grayscale(100%) opacity(80%);
 }
 
 .modal-student-img-wrapper .student-house-img {
   margin-top: 15px;
   width: 100px;
-  filter: opacity(60%);
 }
 
 .modal-student-details-wrapper {
@@ -383,6 +384,23 @@ nav ul li {
 }
 
 .modal-student-button-wrapper .modal-btn {
+  width: 200px;
+  height: 50px;
+  margin: 5px 0;
+  background-color: rgb(206, 83, 83);
+  border-radius: 3px;
+  border: 1px solid #54381e;
+  display: inline-block;
+  cursor: pointer;
+  color: #ffffff;
+  font-family: Arial;
+  font-size: 13px;
+  padding: 6px 24px;
+  text-decoration: none;
+  text-shadow: 0px 1px 0px #4d3534;
+}
+
+/* .modal-student-button-wrapper .modal-btn {
   font-family: "Dancing Script", cursive;
   font-size: 20px;
   color: rgb(190, 22, 22);
@@ -393,11 +411,9 @@ nav ul li {
   opacity: 60%;
   border-left: 1px solid red;
   border-right: 1px solid red;
-  background-image: url("./img/expell-btn.png");
+  /* background-image: url("./img/expell-btn.png");
   background-blend-mode: overlay;
-  background-color: transparent;
-  border: 0;
-}
+  background-color: transparent; */
 
 .modal-student-button-wrapper .modal-btn:hover {
   background-color: rgba(143, 6, 6, 0.4);
@@ -412,14 +428,14 @@ nav ul li {
 }
 
 #warning {
-  font-size: 25px;
-  color: red;
+  font-size: 15px;
+  color: rgb(143, 0, 0);
   display: none;
 }
 
 /* HOUSE COLORS */
 .slytherin {
-  background-color: rgba(118, 238, 118, 0.199);
+  background-color: rgb(118, 238, 118);
 }
 
 /* .slytherin button {
@@ -432,7 +448,7 @@ nav ul li {
 }
 
 .gryffindor {
-  background-color: #f7808059;
+  background-color: #f78080;
 }
 /* 
 .gryffindor button {
@@ -445,7 +461,7 @@ nav ul li {
 }
 
 .hufflepuff {
-  background-color: #eee01742;
+  background-color: #eee017;
 }
 /* 
 .hufflepuff button {
@@ -458,7 +474,7 @@ nav ul li {
 }
 
 .ravenclaw {
-  background-color: #4248a334;
+  background-color: #5e65c2;
 }
 
 /* .ravenclaw button {
