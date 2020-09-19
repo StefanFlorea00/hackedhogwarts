@@ -8,6 +8,7 @@ let allFamilies = [];
 
 const HACK_REMOVE_SQUAD_INTERVAL = 8000;
 let HACKED = false;
+//hack by clicking the hogwarts school logo
 
 const Student = {
   fullName: "",
@@ -84,6 +85,7 @@ function addSheetSelect() {
         "initial";
     });
 }
+
 //TODO: Fix search empty
 function searchStudents() {
   let value = this.value;
@@ -214,6 +216,7 @@ function sortByField(field, array, direction) {
   });
 }
 
+//Add closing modal eventlisteners
 function addModalEvents() {
   const modal = document.querySelector("#student-modal");
   const modalSpan = document.querySelector(".close");
@@ -232,6 +235,7 @@ function addModalEvents() {
   });
 }
 
+//Remove event listeners from previous displayed modals
 function removeBtnEvents(modal) {
   const modalContent = modal.querySelector(".modal-content");
 
@@ -584,7 +588,6 @@ function setPrefect(student, house, setter) {
     if (house.students.length < 2) {
       house.students.push(student);
     } else if (house.students.length == 2) {
-      //TODO add notification
       const lastStudent = house.students[house.students.length - 1];
       document.querySelector("#warning").style.display = "block";
       document.querySelector("#warning").textContent =
