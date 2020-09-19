@@ -1,4 +1,15 @@
 :root {
+  --main-bg-color: #ca5310;
+  --main-font-color: #000000;
+  --main-list-color: #f3c259;
+  --main-btn-color: #ca5310;
+  --main-list-element-color: #ffba5f;
+  --secundary-font-color: #000000;
+  --secundary-list-element-color: #e69f36;
+  --secundary-btn-color: #fc7532;
+}
+/* 
+:root {
   --main-bg-color: #fbba72;
   --main-font-color: #000000;
   --main-list-color: #ca5310;
@@ -7,17 +18,17 @@
   --secundary-font-color: #000000;
   --secundary-list-element-color: #691e06;
   --secundary-btn-color: #fc7532;
-}
+} */
 
 body {
   background-color: var(--main-bg-color);
-  /* background-image: url("./wood-bg.jpg");
+  background-image: url("./img/wood-bg.jpg");
   background-repeat: repeat;
   background-size: auto;
-  background-attachment: scroll; */
+  background-attachment: scroll;
   margin: 0;
   color: var(--main-font-color);
-  font-family: "Rubik", sans-serif;
+  font-family: "Roboto Slab", serif;
 }
 
 /* NAVBAR */
@@ -85,6 +96,8 @@ nav ul li {
 .menu-section {
   display: flex;
   justify-content: space-around;
+  width: 80%;
+  margin: 0 auto;
   margin-bottom: 5vh;
 }
 
@@ -95,11 +108,22 @@ nav ul li {
   width: 400px;
   height: 100px;
   padding: 0 10px;
-  background-color: var(--main-list-color);
 }
 
 #search-wrapper input {
   width: 100%;
+  height: 30px;
+  background-color: var(--main-list-color);
+  border: none;
+  border-bottom: 2px solid var(--main-list-element-color);
+}
+
+#search-wrapper input:focus {
+  background-color: var(--secundary-btn-color);
+}
+
+#search-wrapper input::placeholder {
+  color: black;
 }
 
 .filter-img {
@@ -139,7 +163,7 @@ nav ul li {
   margin-bottom: 10vh;
   background-color: var(--main-list-color);
   padding: 20px 0;
-  width: 80%;
+  width: 60%;
   margin-left: auto;
   margin-right: auto;
 }
@@ -175,6 +199,11 @@ nav ul li {
 
 .student-house-img {
   width: 60px;
+}
+
+.student-gender-img {
+  width: 20px;
+  margin-left: 5px;
 }
 
 .student-name {
@@ -215,7 +244,7 @@ nav ul li {
 /* INFO */
 
 .info-section {
-  width: 80%;
+  width: 60%;
   margin-left: auto;
   margin-right: auto;
 }
@@ -223,10 +252,34 @@ nav ul li {
 .info-section .basic-wrapper {
   display: flex;
   justify-content: flex-start;
+  background-color: var(--main-list-color);
+  width: auto;
+  padding: 0 10px;
+}
+
+.basic-wrapper [data-info="list-current"] {
+  margin-left: auto;
+  cursor: pointer;
+}
+
+.basic-wrapper [data-info="list-current"]:hover {
+  font-weight: bold;
+}
+
+.basic-wrapper [data-info="list-expelled"] {
+  cursor: pointer;
+}
+
+.basic-wrapper [data-info="list-expelled"]:hover {
+  font-weight: bold;
 }
 
 .basic-wrapper p {
   margin-right: 20px;
+}
+
+.basic-wrapper p:last-child {
+  margin-right: 0;
 }
 
 .info-section .advanced-wrapper {
@@ -258,17 +311,23 @@ nav ul li {
 .modal-content {
   display: flex;
   background-color: #fefefe;
-  margin: 10% auto;
+  background-image: url("./img/lined_paper.png");
+  background-blend-mode: multiply;
+  background-size: 120%;
+  background-position: center;
+  font-family: "Dancing Script", cursive;
+  margin: 5% auto;
   padding: 20px;
-  border: 1px solid #888;
-  width: 80%;
+  width: 30%;
+  height: 70%;
 }
 
 .close {
-  color: #aaa;
+  color: #000;
   float: right;
-  font-size: 28px;
+  font-size: 45px;
   font-weight: bold;
+  height: 30px;
 }
 
 .close:hover,
@@ -287,16 +346,18 @@ nav ul li {
 
 .modal-student-img-wrapper .student-img {
   width: 200px;
+  filter: grayscale(100%) opacity(80%);
 }
 
 .modal-student-img-wrapper .student-house-img {
   margin-top: 15px;
   width: 100px;
+  filter: opacity(60%);
 }
 
 .modal-student-details-wrapper {
   width: 90%;
-  margin-left: 5vw;
+  margin-left: 2vw;
   display: flex;
   flex-flow: column;
   justify-content: flex-start;
@@ -306,65 +367,104 @@ nav ul li {
   margin-left: 0;
 }
 
+.modal-student-details-wrapper .student-name span {
+  font-weight: normal;
+}
+
 .modal-student-details-wrapper .student-details {
   margin-left: 0;
 }
 
 .modal-student-button-wrapper {
   display: flex;
-  justify-content: space-between;
+  flex-flow: column;
+  align-items: center;
   margin-top: auto;
-  width: 90%;
+}
+
+.modal-student-button-wrapper .modal-btn {
+  font-family: "Dancing Script", cursive;
+  font-size: 20px;
+  color: rgb(190, 22, 22);
+  width: 200px;
+  height: 50px;
+  margin: 5px 0;
+  cursor: pointer;
+  opacity: 60%;
+  border-left: 1px solid red;
+  border-right: 1px solid red;
+  background-image: url("./img/expell-btn.png");
+  background-blend-mode: overlay;
+  background-color: transparent;
+  border: 0;
+}
+
+.modal-student-button-wrapper .modal-btn:hover {
+  background-color: rgba(143, 6, 6, 0.4);
+}
+
+.modal-student-button-wrapper #promote-btn {
+  filter: hue-rotate(90deg);
+}
+
+.modal-student-button-wrapper #prefect-btn {
+  filter: hue-rotate(210deg);
+}
+
+#warning {
+  font-size: 25px;
+  color: red;
+  display: none;
 }
 
 /* HOUSE COLORS */
 .slytherin {
-  background-color: #0d6217;
+  background-color: rgba(118, 238, 118, 0.199);
 }
 
-.slytherin button {
+/* .slytherin button {
   background-color: #aaaaaa;
   border: 1px solid #777777;
-}
+} */
 
 .slytherin button:hover {
   background-color: #cccccc;
 }
 
 .gryffindor {
-  background-color: #7f0909;
+  background-color: #f7808059;
 }
-
+/* 
 .gryffindor button {
   background-color: #ffc500;
   border: 1px solid #c99a00;
-}
+} */
 
 .gryffindor button:hover {
   background-color: #ffd54d;
 }
 
 .hufflepuff {
-  background-color: #eee117;
+  background-color: #eee01742;
 }
-
+/* 
 .hufflepuff button {
   background-color: #aaaaaa;
   border: 1px solid #777777;
-}
+} */
 
 .hufflepuff button:hover {
   background-color: #cccccc;
 }
 
 .ravenclaw {
-  background-color: #000a90;
+  background-color: #4248a334;
 }
 
-.ravenclaw button {
+/* .ravenclaw button {
   background-color: #946b2d;
   border: 1px solid #5f4216;
-}
+} */
 
 .ravenclaw button:hover {
   background-color: #c99c59;

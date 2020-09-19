@@ -43,6 +43,7 @@ function init() {
   };
   request();
 
+  addSheetSelect();
   addModalEvents();
   addSort();
   addFilter();
@@ -62,14 +63,34 @@ function addSearch() {
   search.addEventListener("input", searchStudents);
 }
 
+function addSheetSelect() {
+  document.querySelector("[data-info=list-current]").style.fontWeight = "bold";
+
+  document
+    .querySelector("[data-info=list-current]")
+    .addEventListener("click", function () {
+      displayList(displayedStudents);
+      this.style.fontWeight = "bold";
+      document.querySelector("[data-info=list-expelled]").style.fontWeight =
+        "initial";
+    });
+  document
+    .querySelector("[data-info=list-expelled]")
+    .addEventListener("click", function () {
+      displayList(expelledStudents);
+      this.style.fontWeight = "bold";
+      document.querySelector("[data-info=list-current]").style.fontWeight =
+        "initial";
+    });
+}
 //TODO: Fix search empty
 function searchStudents() {
   let value = this.value;
   console.log(value);
   let searchedStudents = [];
-  for (let i = 0; i < displayedStudents.length; i++) {
-    if (displayedStudents[i].fullName.search(value) != -1) {
-      searchedStudents.push(displayedStudents[i]);
+  for (let i = 0; i < allStudents.length; i++) {
+    if (allStudents[i].fullName.search(value) != -1) {
+      searchedStudents.push(allStudents[i]);
       displayedStudents = searchedStudents;
       displayList(displayedStudents);
     }
@@ -195,19 +216,19 @@ function sortByField(field, array, direction) {
 function addModalEvents() {
   const modal = document.querySelector("#student-modal");
   const modalSpan = document.querySelector(".close");
-  modalSpan.onclick = function () {
+  modalSpan.addEventListener("click", function () {
     modal.style.display = "none";
     modal.querySelector(".modal-content").className = "modal-content";
     removeBtnEvents(modal);
-  };
+  });
 
-  window.onclick = function (event) {
+  window.addEventListener("click", function (event) {
     if (event.target == modal) {
       modal.style.display = "none";
       modal.querySelector(".modal-content").className = "modal-content";
       removeBtnEvents(modal);
     }
-  };
+  });
 }
 
 function removeBtnEvents(modal) {
@@ -215,14 +236,17 @@ function removeBtnEvents(modal) {
 
   const expellBtn = modalContent.querySelector("#expell-btn"),
     expellBtnClone = expellBtn.cloneNode(true);
+  expellBtnClone.style.pointerEvents = "auto";
   expellBtn.parentNode.replaceChild(expellBtnClone, expellBtn);
 
   const prefectBtn = modalContent.querySelector("#prefect-btn"),
     prefectBtnClone = prefectBtn.cloneNode(true);
+  prefectBtnClone.style.pointerEvents = "auto";
   prefectBtn.parentNode.replaceChild(prefectBtnClone, prefectBtn);
 
   const promoteBtn = modalContent.querySelector("#promote-btn"),
     promoteBtnclone = promoteBtn.cloneNode(true);
+  promoteBtnclone.style.pointerEvents = "auto";
   promoteBtn.parentNode.replaceChild(promoteBtnclone, promoteBtn);
 }
 
@@ -255,14 +279,22 @@ function addHouses() {
   }
 }
 
+//JSON.parse(JSON.stringify(Student))
+
 function prepareObjectStudent(jsonObject) {
   const student = Object.create(Student);
-  //JSON.parse(JSON.stringify(Student))
   console.log(getStudentAttr(jsonObject, "fullname"));
 
   student.fullName = getStudentAttr(jsonObject, "fullname");
   student.firstName = capitalizeFirstLetter(getStudentFirstName(jsonObject));
-  student.middleName = capitalizeFirstLetter(getStudentMiddleNames(jsonObject));
+
+  if (getStudentMiddleNames(jsonObject).charAt(0) == `"`) {
+    student.nickName = capitalizeFirstLetter(getStudentMiddleNames(jsonObject));
+  } else
+    student.middleName = capitalizeFirstLetter(
+      getStudentMiddleNames(jsonObject)
+    );
+
   student.lastName = capitalizeFirstLetter(getStudentLastName(jsonObject));
   student.gender = capitalizeFirstLetter(getStudentAttr(jsonObject, "gender"));
   student.house = capitalizeFirstLetter(getStudentAttr(jsonObject, "house"));
@@ -310,6 +342,7 @@ function getStudentMiddleNames(jsonObject) {
 
 function getStudentLastName(jsonObject) {
   const fullName = getStudentAttr(jsonObject, "fullname");
+
   if (fullName.split(" ").length <= 1) {
     //FIXME
     return "[not set]";
@@ -322,8 +355,21 @@ function getStudentImg(fname, lname) {
 }
 
 function capitalizeFirstLetter(name) {
-  if (name) return name.charAt(0).toUpperCase() + name.slice(1);
-  else return "";
+  if (name) {
+    if (name.split("-").length > 1) {
+      const splitName = name.split("-");
+      return (
+        splitName[0].charAt(0).toUpperCase() +
+        splitName[0].slice(1) +
+        "-" +
+        splitName[1].charAt(0).toUpperCase() +
+        splitName[1].slice(1)
+      );
+    }
+    if (name.charAt(0) == `"`) {
+      return name.charAt(0) + name.charAt(1).toUpperCase() + name.slice(2);
+    } else return name.charAt(0).toUpperCase() + name.slice(1);
+  } else return "";
 }
 
 function displayList(students) {
@@ -339,24 +385,26 @@ function displayStudent(student) {
 
   clone.querySelector("[data-field=name]").textContent =
     student.firstName + " " + student.middleName + " " + student.lastName;
-  clone.querySelector("[data-field=gender]").textContent = student.gender;
-  clone.querySelector("[data-field=house]").textContent = student.house;
-  clone.querySelector("[data-field=blood]").textContent = student.bloodStatus;
+
+  clone.querySelector("[data-field=gender]").src =
+    "./img/" + student.gender + ".png";
+  clone.querySelector("[data-field=blood]").textContent = capitalizeFirstLetter(
+    student.bloodStatus
+  );
   clone.querySelector("[data-field=img]").src =
     "./img/student-img/" + student.img + ".png";
-
   clone.querySelector("[data-field=houseimg]").src =
     "./img/" + student.house.trim().toLowerCase() + ".png";
   let modalBtn = clone.querySelector(".details-btn");
 
   if (student.expelled) {
-    clone.querySelector(".student").style.backgroundColor = "red";
     clone.querySelector("[data-field=expelled]").textContent = "EXPELLED";
   }
 
   modalBtn.addEventListener("click", function () {
     displayStudentDetails(student);
   });
+
   document.querySelector("#main-section").appendChild(clone);
 }
 
@@ -370,47 +418,85 @@ function displayStudentDetails(student) {
 function addStudentDisplayEvents(modal, student) {
   modal.querySelector("#expell-btn").addEventListener("click", function () {
     expellStudent(student);
+    modal.querySelector("#prefect-btn").style.pointerEvents = "none";
+    modal.querySelector("#promote-btn").style.pointerEvents = "none";
   });
 
   modal.querySelector("#prefect-btn").addEventListener("click", function () {
     if (isPrefectFromHouse(student, getPrefectHouse(student))) {
-      setPrefect(student, getPrefectHouse(student), false);
       modal.querySelector("#prefect-btn").textContent = "Set Prefect";
+      setPrefect(student, getPrefectHouse(student), false);
     } else {
-      setPrefect(student, getPrefectHouse(student), true);
       modal.querySelector("#prefect-btn").textContent = "Remove Prefect";
+      setPrefect(student, getPrefectHouse(student), true);
     }
   });
 
   modal.querySelector("#promote-btn").addEventListener("click", function () {
     if (isInSquad(student)) {
-      setSquad(student, false);
       modal.querySelector("#promote-btn").textContent = "Add to Squad";
+      setSquad(student, false);
     } else {
-      setSquad(student, true);
-      modal.querySelector("#promote-btn").textContent = "Remove From Squad";
+      if (setSquad(student, true)) {
+        modal.querySelector("#promote-btn").textContent = "Remove From Squad";
+        setSquad(student, true);
+      } else {
+        document.querySelector("#warning").style.display = "block";
+        document.querySelector("#warning").textContent =
+          "Student does not meet requirements for being in the inquisitorial squad.";
+      }
     }
   });
 }
 
 function updateStudentDetailsDisplay(modal, student) {
+  modal.style.display = "block";
   modal
     .querySelector(".modal-content")
     .classList.add(student.house.toLowerCase());
-  modal.querySelector(
-    "[data-field=fname]"
-  ).textContent = `First name: ${student.firstName}`;
-  modal.querySelector(
-    "[data-field=mname]"
-  ).textContent = `Middle name: ${student.middleName}`;
-  modal.querySelector(
-    "[data-field=lname]"
-  ).textContent = `Last name: ${student.lastName}`;
-  modal.style.display = "block";
+
+  modal.querySelector("[data-field=fname]").textContent = student.firstName;
+  if (student.middleName != "") {
+    modal.querySelector("[data-field=mname]").parentNode.style.display =
+      "block";
+    modal.querySelector("[data-field=mname]").textContent = student.middleName;
+  } else {
+    modal.querySelector("[data-field=mname]").parentNode.style.display = "none";
+  }
+  if (student.nickName != "") {
+    modal.querySelector("[data-field=nname]").parentNode.style.display =
+      "block";
+    modal.querySelector("[data-field=nname]").textContent = student.nickName;
+  } else {
+    modal.querySelector("[data-field=nname]").parentNode.style.display = "none";
+  }
+  modal.querySelector("[data-field=lname]").textContent = student.lastName;
+
   modal.querySelector("[data-field=houseimg]").src =
     "./img/" + student.house.trim().toLowerCase() + ".png";
   modal.querySelector("[data-field=img]").src =
     "./img/student-img/" + student.img + ".png";
+
+  modal.querySelector("#warning").style.display = "none";
+
+  if (student.expelled) {
+    modal.querySelector("#prefect-btn").style.pointerEvents = "none";
+    modal.querySelector("#promote-btn").style.pointerEvents = "none";
+    modal.querySelector("#expell-btn").style.pointerEvents = "none";
+  }
+
+  if (isPrefectFromHouse(student, getPrefectHouse(student))) {
+    modal.querySelector("[data-field=details]").textContent =
+      "Student is prefect";
+  } else {
+    modal.querySelector("[data-field=details]").textContent = "";
+  }
+  if (isInSquad(student)) {
+    modal.querySelector("[data-field=details2]").textContent =
+      "Student is in squad";
+  } else {
+    modal.querySelector("[data-field=details2]").textContent = "";
+  }
 
   console.log(
     "PREF:",
@@ -418,6 +504,7 @@ function updateStudentDetailsDisplay(modal, student) {
     "SQUAD:",
     isInSquad(student)
   );
+
   if (isPrefectFromHouse(student, getPrefectHouse(student))) {
     modal.querySelector("#prefect-btn").textContent = "Remove Prefect";
   } else {
@@ -476,10 +563,11 @@ function setSquad(student, setter) {
   ) {
     student.squad = setter;
     console.log("PURE", student.squad);
+    updateListInfo();
+    return true;
   } else {
-    console.log("NOT PURE");
+    return false;
   }
-  updateListInfo();
 }
 
 function setPrefect(student, house, setter) {
@@ -488,6 +576,14 @@ function setPrefect(student, house, setter) {
       house.students.push(student);
     } else if (house.students.length == 2) {
       //TODO add notification
+      const lastStudent = house.students[house.students.length - 1];
+      document.querySelector("#warning").style.display = "block";
+      document.querySelector("#warning").textContent =
+        "Warning, student " +
+        lastStudent.firstName +
+        " " +
+        lastStudent.lastName +
+        " was removed from prefects.";
       house.students.pop();
       house.students.push(student);
     }
@@ -509,11 +605,11 @@ function hackTheSystem() {
 }
 
 function hackStudent() {
-  const newStudent = addHackerStudent();
+  const newStudent = createHackerStudent();
   allStudents.unshift(newStudent);
 }
 
-function addHackerStudent() {
+function createHackerStudent() {
   let student = Object.create(Student);
   student.firstName = "Stefan";
   student.middleName = "Andrei";
@@ -574,7 +670,9 @@ function changeTheme() {
   let root = document.documentElement;
   root.style.setProperty("--main-bg-color", "#000000");
   document.querySelector("body").style.backgroundColor = "black";
+  document.querySelector("body").style.backgroundImage = "none";
   document.querySelector("body").style.fontFamily = "'VT323', cursive";
+  document.querySelector(".title-section").style.filter = "hue-rotate(50deg)";
   root.style.setProperty("--main-font-color", "#003603");
   root.style.setProperty("--main-list-color", "#00b809");
   root.style.setProperty("--main-btn-color", "#000000");

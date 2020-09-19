@@ -1,115 +1,167 @@
 <!DOCTYPE html>
 <html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+    <link
+      href="https://fonts.googleapis.com/css2?family=Roboto+Slab:wght@400;700&display=swap"
+      rel="stylesheet"
+    />
+    <link
+      href="https://fonts.googleapis.com/css2?family=VT323&display=swap"
+      rel="stylesheet"
+    />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Tangerine:wght@700&display=swap"
+      rel="stylesheet"
+    />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Dancing+Script&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="style.css" />
+  </head>
 
-<head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Document</title>
-  <link href="https://fonts.googleapis.com/css2?family=Rubik:ital,wght@0,300;0,400;0,700;1,400&display=swap"
-    rel="stylesheet" />
-  <link href="https://fonts.googleapis.com/css2?family=VT323&display=swap" rel="stylesheet">
-  <link href="https://fonts.googleapis.com/css2?family=Tangerine:wght@700&display=swap" rel="stylesheet" />
+  <body>
+    <header>
+      <nav>
+        <ul>
+          <li><a href="default.asp">Home</a></li>
+          <li><a href="news.asp">News</a></li>
+          <li><a href="contact.asp">Student List</a></li>
+        </ul>
+      </nav>
+    </header>
+    <section class="title-section">
+      <div class="title-wrapper">
+        <img class="title-img" src="./img/hogwarts-logo.png" alt="" />
+        <h1 class="title-h1">Hogwarts</h1>
+        <img class="title-bg-img" src="./img/title-bg.jpg" />
+      </div>
+    </section>
 
-  <link rel="stylesheet" href="style.css" />
-</head>
+    <section class="menu-section">
+      <div class="menu-wrapper" id="filter-wrapper">
+        <p class="menu-text">Filter by</p>
+        <img
+          src="img/gryffindor.png"
+          alt=""
+          data-action="filter"
+          data-filter="gryffindor"
+          class="filter-img"
+        />
+        <img
+          src="img/hufflepuff.png"
+          alt=""
+          data-action="filter"
+          data-filter="hufflepuff"
+          class="filter-img"
+        />
+        <img
+          src="img/slytherin.png"
+          alt=""
+          data-action="filter"
+          data-filter="slytherin"
+          class="filter-img"
+        />
+        <img
+          src="img/ravenclaw.png"
+          alt=""
+          data-action="filter"
+          data-filter="ravenclaw"
+          class="filter-img"
+        />
+      </div>
+      <div class="menu-wrapper" id="search-wrapper">
+        <p class="menu-text"></p>
+        <input
+          class="menu-input"
+          type="text"
+          name="search"
+          id="search"
+          placeholder="Search..."
+        />
+      </div>
+      <div class="menu-wrapper" id="sort-wrapper">
+        <p class="menu-text">Sort by</p>
+        <p data-action="sort" data-sort-direction="asc" data-sort="firstName">
+          Forename
+        </p>
+        <p data-action="sort" data-sort-direction="asc" data-sort="lastName">
+          Surname
+        </p>
+        <p data-action="sort" data-sort-direction="asc" data-sort="gender">
+          Gender
+        </p>
+        <p data-action="sort" data-sort-direction="asc" data-sort="house">
+          House
+        </p>
+      </div>
+    </section>
 
-<body>
-  <header>
-    <nav>
-      <ul>
-        <li><a href="default.asp">Home</a></li>
-        <li><a href="news.asp">News</a></li>
-        <li><a href="contact.asp">Student List</a></li>
-      </ul>
-    </nav>
-  </header>
-  <section class="title-section">
-    <div class="title-wrapper">
-      <img class="title-img" src="./img/hogwarts-logo.png" alt="" />
-      <h1 class="title-h1">Hogwarts</h1>
-      <img class="title-bg-img" src="./img/title-bg.jpg" />
-    </div>
-  </section>
+    <section class="info-section" id="info-section">
+      <div class="basic-wrapper">
+        <p data-info="all">Students:</p>
+        <p data-info="displayed">Displayed Students:</p>
+        <p data-info="list-current">Current Students</p>
+        <p data-info="list-expelled">Expelled Students</p>
+      </div>
+      <div class="advanced-wrapper">
+        <p>Advanced</p>
+        <p data-info="expelled">Expelled Students:</p>
+        <p data-info="inquisitorial">Inquisitorial Squad Members:</p>
+        <p data-info="prefects">Inquisitorial Squad Members:</p>
+      </div>
+    </section>
+    <main class="main-section" id="main-section"></main>
 
-  <section class="menu-section">
-    <div class="menu-wrapper" id="filter-wrapper">
-      <p class="menu-text">Filter by</p>
-      <img src="img/gryffindor.png" alt="" data-action="filter" data-filter="gryffindor" class="filter-img" />
-      <img src="img/hufflepuff.png" alt="" data-action="filter" data-filter="hufflepuff" class="filter-img" />
-      <img src="img/slytherin.png" alt="" data-action="filter" data-filter="slytherin" class="filter-img" />
-      <img src="img/ravenclaw.png" alt="" data-action="filter" data-filter="ravenclaw" class="filter-img" />
-    </div>
-    <div class="menu-wrapper" id="search-wrapper">
-      <p class="menu-text">Search</p>
-      <input class="menu-input" type="text" name="search" id="search" />
-    </div>
-    <div class="menu-wrapper" id="sort-wrapper">
-      <p class="menu-text">Sort by</p>
-      <p data-action="sort" data-sort-direction="asc" data-sort="firstName">
-        Forename
-      </p>
-      <p data-action="sort" data-sort-direction="asc" data-sort="lastName">
-        Surname
-      </p>
-      <p data-action="sort" data-sort-direction="asc" data-sort="gender">
-        Gender
-      </p>
-      <p data-action="sort" data-sort-direction="asc" data-sort="house">
-        House
-      </p>
-    </div>
-  </section>
-
-  <section class="info-section" id="info-section">
-    <div class="basic-wrapper">
-      <p data-info="all">Students:</p>
-      <p data-info="displayed">Displayed Students:</p>
-    </div>
-    <div class="advanced-wrapper">
-      <p>Advanced</p>
-      <p data-info="expelled">Expelled Students:</p>
-      <p data-info="inquisitorial">Inquisitorial Squad Members:</p>
-      <p data-info="prefects">Inquisitorial Squad Members:</p>
-    </div>
-  </section>
-  <main class="main-section" id="main-section"></main>
-
-  <template id="student">
-    <div class="student">
-      <img class="student-img" src="" alt="" data-field="img" />
-      <img class="student-house-img" src="" alt="" data-field="houseimg" />
-      <h2 class="student-name" data-field="name">Name Surname</h2>
-      <p class="student-details" data-field="gender">Details1</p>
-      <p class="student-details" data-field="house">Details1</p>
-      <p class="student-details" data-field="blood">Details1</p>
-      <p class="student-details" data-field="expelled"></p>
-      <button class="details-btn">Details</button>
-    </div>
-  </template>
-
-  <div id="student-modal" class="modal">
-    <div class="modal-content">
-      <div class="modal-student-img-wrapper">
+    <template id="student">
+      <div class="student">
         <img class="student-img" src="" alt="" data-field="img" />
         <img class="student-house-img" src="" alt="" data-field="houseimg" />
+        <h2 class="student-name" data-field="name">Name Surname</h2>
+        <img class="student-gender-img" src="" alt="" data-field="gender" />
+        <!-- <p class="student-details" data-field="house"></p> -->
+        <p class="student-details" data-field="blood"></p>
+        <p class="student-details" data-field="expelled"></p>
+        <button class="details-btn">Details</button>
       </div>
-      <div class="modal-student-details-wrapper">
-        <h2 class="student-name" data-field="fname">First Name:</h2>
-        <h2 class="student-name" data-field="mname">Middle Name:</h2>
-        <h2 class="student-name" data-field="lname">Last Name:</h2>
-        <p class="student-details">Details1</p>
-        <div class="modal-student-button-wrapper">
-          <button class="details-btn" id="expell-btn">Expel</button>
-          <button class="details-btn" id="promote-btn">Promote</button>
-          <button class="details-btn" id="prefect-btn">Set Prefect</button>
+    </template>
+
+    <div id="student-modal" class="modal">
+      <div class="modal-content">
+        <div class="modal-student-img-wrapper">
+          <img class="student-img" src="" alt="" data-field="img" />
+          <img class="student-house-img" src="" alt="" data-field="houseimg" />
         </div>
+        <div class="modal-student-details-wrapper">
+          <h2 class="student-name">
+            First Name: <span data-field="fname"></span>
+          </h2>
+          <h2 class="student-name">
+            Middle Name: <span data-field="mname"></span>
+          </h2>
+          <h2 class="student-name">
+            Nick Name: <span data-field="nname"></span>
+          </h2>
+          <h2 class="student-name">
+            Last Name: <span data-field="lname"></span>
+          </h2>
+          <p class="student-details" data-field="details"></p>
+          <p class="student-details" data-field="details2"></p>
+          <div class="modal-student-button-wrapper">
+            <p class="student-warning" id="warning">warning</p>
+            <button class="modal-btn" id="expell-btn">Expel</button>
+            <button class="modal-btn" id="promote-btn">Promote</button>
+            <button class="modal-btn" id="prefect-btn">Set Prefect</button>
+          </div>
+        </div>
+        <span class="close">&times;</span>
       </div>
-      <span class="close">&times;</span>
     </div>
-  </div>
 
-  <footer></footer>
-</body>
-<script src="studentlist.js"></script>
-
+    <footer></footer>
+  </body>
+  <script src="studentlist.js"></script>
 </html>
