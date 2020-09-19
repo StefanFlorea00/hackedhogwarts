@@ -389,9 +389,9 @@ function displayStudent(student) {
 
   clone.querySelector("[data-field=gender]").src =
     "./img/" + student.gender + ".png";
-  clone.querySelector("[data-field=blood]").textContent = capitalizeFirstLetter(
-    student.bloodStatus
-  );
+  // clone.querySelector("[data-field=blood]").textContent = capitalizeFirstLetter(
+  //   student.bloodStatus
+  // );
   clone.querySelector("[data-field=img]").src =
     "./img/student-img/" + student.img + ".png";
   clone.querySelector("[data-field=houseimg]").src =
@@ -472,6 +472,8 @@ function updateStudentDetailsDisplay(modal, student) {
     modal.querySelector("[data-field=nname]").parentNode.style.display = "none";
   }
   modal.querySelector("[data-field=lname]").textContent = student.lastName;
+  modal.querySelector("[data-field=blood-status]").textContent =
+    "Blood Status: " + capitalizeFirstLetter(student.bloodStatus);
 
   modal.querySelector("[data-field=houseimg]").src =
     "./img/" + student.house.trim().toLowerCase() + ".png";
